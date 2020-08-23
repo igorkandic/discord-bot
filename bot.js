@@ -26,7 +26,7 @@ client.on('message', msg => {
     const command=args.shift().toLowerCase();
   if(command=="horny"){
     var chance =Math.random()*100;
-    if(chance>10){
+    if(chance<10){
 
       msg.channel.send(poruke[Math.floor(Math.random() * poruke.length)]);
     }else{
