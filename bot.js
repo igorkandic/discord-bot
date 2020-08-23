@@ -11,6 +11,8 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
 
+var poruke=["Go to horny jail","bonk","kys","sta to radis krompiru","ono tvoje","<:bonk:746893067155669092>","tuzna si","baka"];
+
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -23,9 +25,14 @@ client.on('message', msg => {
     const args=msg.content.slice(prefix.length).trim().split(' ');
     const command=args.shift().toLowerCase();
   if(command=="horny"){
+    var chance =Math.random()*100;
+    if(chance>10){
+
+      msg.channel.send(poruke[Math.floor(Math.random() * poruke.length)]);
+    }else{
       if(!args.length){
 
-              nana.search("english").then((g) =>{
+       nana.search("english").then((g) =>{
          
         var pages=Math.ceil(g.num_results/25);
 
@@ -40,7 +47,7 @@ client.on('message', msg => {
       
       } else if(args.length==1){
       var tag=args[0].replace("_"," ");
-            nana.search("english+"+tag).then((g) =>{
+      nana.search("english+"+tag).then((g) =>{
 
         var pages=Math.ceil(g.num_results/25);
         
@@ -53,9 +60,10 @@ client.on('message', msg => {
       });
     }
     else{
-      msg.channel.send(`ako hoces vise tagova stavi + izmedju (stockings+yaoi), ako ima razmake koristi _ (big_breasts)`);
+      msg.channel.send(`ako hoces vise tagova stavi + izmedju (stockings+rape), ako ima razmake koristi _ (big_breasts)`);
     }    
   }
+}
 
 
 });
