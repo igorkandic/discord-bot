@@ -25,8 +25,14 @@ client.on('message', msg => {
   if(command=="horny"){
       if(!args.length){
 
-       nana.random().then((g) =>{
-         msg.channel.send(`https://nhentai.net/g/${g.id}/`);
+              nana.search("english").then((g) =>{
+         
+        var pages=Math.ceil(g.num_results/25);
+
+        nana.search("english",getRandomInt(0,pages)).then((n) =>{
+          msg.channel.send(`https://nhentai.net/g/${n.results[getRandomInt(0,25)].id}/`);
+        });
+
        });
           
        
@@ -34,12 +40,12 @@ client.on('message', msg => {
       
       } else if(args.length==1){
       var tag=args[0].replace("_"," ");
-      nana.tag(tag).then((g) =>{
+            nana.search("english+"+tag).then((g) =>{
 
         var pages=Math.ceil(g.num_results/25);
         
 
-        nana.tag(tag,getRandomInt(0,pages)).then((n) =>{
+        nana.search("english+"+tag,getRandomInt(0,pages)).then((n) =>{
           
           msg.channel.send(`https://nhentai.net/g/${n.results[getRandomInt(0,25)].id}/`);
         });
@@ -47,7 +53,7 @@ client.on('message', msg => {
       });
     }
     else{
-      msg.channel.send(`pls samo jedan tag, ako ima razmake koristi _ (big_breasts)`);
+      msg.channel.send(`ako hoces vise tagova stavi + izmedju (stockings+yaoi), ako ima razmake koristi _ (big_breasts)`);
     }    
   }
 
