@@ -79,6 +79,18 @@ client.on('voiceStateUpdate', (oldState, newState) => {
         });
       }
     });
+	  
+	      Array.prototype.remove = function() {
+      var what, a = arguments, L = a.length, ax;
+      while (L && this.length) {
+          what = a[--L];
+          while ((ax = this.indexOf(what)) !== -1) {
+              this.splice(ax, 1);
+          }
+      }
+      return this;
+  };
+  voice.remove(newState.id);
 
     // var role=newState.guild.roles.cache.find(role=> role.name==="voice");
     // newState.member.roles.add(role);
