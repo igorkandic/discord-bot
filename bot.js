@@ -9,6 +9,11 @@ var con = mysql.createConnection({
   database: process.env.mysqldb
 });
 
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+  
+});
 const client = new Discord.Client();
 const {prefix,token}=require('./config.json');
 
