@@ -118,6 +118,9 @@ client.on('message', msg => {
     if(!msg.content.startsWith(prefix) || msg.author.bot) return;
     const args=msg.content.slice(prefix.length).trim().split(' ');
     const command=args.shift().toLowerCase();
+	if(command=="test"){
+	msg.channel.send(voice);
+	}
     if(command=="xp"){
       if(!args.length){
         var sql = "SELECT * FROM users where DiscordId="+mysql.escape(msg.author.id);
