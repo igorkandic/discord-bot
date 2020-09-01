@@ -126,6 +126,25 @@ client.on('message', msg => {
 	if(command=="test"){
 	msg.channel.send(voice);
 	}
+	    if(command=="day"){
+      if(!args.length){
+        var sql = "CALL GetTodayXP(?)";
+        con.query(sql,msg.author.id, function (err, result,fields) {
+          if (err) throw err;
+          if(!result[0])
+          msg.channel.send(`${msg.author.username} danas nisi bila u voice`);
+          else
+          msg.channel.send(`${msg.author.username} danas `+result[0][0].vreme+` XP`);
+          
+        });
+
+      }
+      else
+      {
+        msg.reply("soon");
+      }
+      
+    }
     if(command=="xp"){
       if(!args.length){
         var sql = "SELECT * FROM users where DiscordId="+mysql.escape(msg.author.id);
