@@ -131,7 +131,7 @@ client.on('message', msg => {
         var sql = "CALL GetTodayXP(?)";
         con.query(sql,msg.author.id, function (err, result,fields) {
           if (err) throw err;
-          if(!result[0])
+          if(!result[0][0])
           msg.channel.send(`${msg.author.username} danas nisi bila u voice`);
           else
           msg.channel.send(`${msg.author.username} danas `+result[0][0].vreme+` XP`);
