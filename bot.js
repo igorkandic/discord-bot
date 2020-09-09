@@ -154,6 +154,21 @@ client.on('message', msg => {
 	msg.channel.send(voice);
 		
 	}
+	if(command=="baka"){
+	    const channel = msg.member.voice.channel;
+      if (!channel) return console.error("Nisi u voice!");
+      channel.join().then(connection => {
+        // Yay, it worked!
+        //console.log("Successfully connected.");
+        const dispatcher= connection.play('https://raw.githubusercontent.com/igorkandic/nhentai/master/combobreak.mp3');
+        dispatcher.on("finish", () => {channel.leave();});
+        
+        
+      }).catch(e => {
+        // Oh no, it errored! Let's log it to console :)
+        console.error(e);
+      });
+	}
 	    if(command=="day"){
       if(!args.length){
         var sql = "CALL GetTodayXP(?)";
