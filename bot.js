@@ -66,6 +66,7 @@ client.on('ready', () => {
 });
 
 client.on('voiceStateUpdate', (oldState, newState) => {
+	if(!newState.member.user.bot){
   if(newState.channel!=null){
   //console.log("usao "+newState.id);
 
@@ -117,6 +118,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
     // oldState.member.roles.remove(role);
    voice.remove(newState.id);
   }
+	}
 });
 
 client.on('message', msg => {
@@ -125,6 +127,20 @@ client.on('message', msg => {
     const command=args.shift().toLowerCase();
 	if(command=="test"){
 	msg.channel.send(voice);
+	const channel = msg.member.voice.channel;
+      if (!channel) return console.error("Nisi u voice!");
+      channel.join().then(connection => {
+        // Yay, it worked!
+        console.log("Successfully connected.");
+        const dispatcher= connection.play('combobreak.mp3');
+        dispatcher.on("finish", () => {channel.leave();});
+        
+        
+      }).catch(e => {
+        // Oh no, it errored! Let's log it to console :)
+        console.error(e);
+      });
+		
 	}
 	    if(command=="day"){
       if(!args.length){
@@ -141,7 +157,25 @@ client.on('message', msg => {
       }
       else
       {
-        msg.reply("soon");
+                var user=args[0];
+        try{
+          user=getUserFromMention(args[0]);
+        }catch(e){
+          console.log(e);
+        }finally{
+        }
+        if(user instanceof Discord.User){
+        var sql = "CALL GetTodayXP(?)";
+        con.query(sql,user.id, function (err, result,fields) {
+          if (err) throw err;
+          if(!result[0][0])
+          msg.channel.send(`${user.username} danas nije bio u voice`);
+          else
+            msg.channel.send(`${user.username} danas `+result[0][0].vreme+` XP`);
+        });
+      }else{
+        msg.channel.send("Pogresno ime");
+      }
       }
       
     }
