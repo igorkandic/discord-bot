@@ -46,7 +46,7 @@ function addXp(id){
   });
 }
 
-var poruke=["Go to horny jail","bonk","kys","sta to radis krompiru","ono tvoje","<:bonk:746893067155669092>","tuzna si","baka"];
+var poruke=["Go to horny jail","bonk","kys","sta to radis krompiru","ono tvoje","<:bonk:741385199685992500>","tuzna si","baka"];
 var bonks=["https://media1.tenor.com/images/c409b7031d3768c24db8bc0cbb1a2cb5/tenor.gif","https://media1.tenor.com/images/347f852d3dfa48502406fa949fcc1449/tenor.gif","https://media1.tenor.com/images/2bee3954016b407ddaa255e2ca6dc529/tenor.gif"];
 var voice=[];
 
@@ -122,12 +122,15 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 });
 
 client.on('message', msg => {
-    if(!msg.content.startsWith(prefix) || msg.author.bot) return;
-    const args=msg.content.slice(prefix.length).trim().split(' ');
-    const command=args.shift().toLowerCase();
-	if(command=="test"){
-	msg.channel.send(voice);
-	const channel = msg.member.voice.channel;
+	  //reacts to messages
+  if(msg.author.bot) return;
+ 
+  if(msg.content.includes("kingu") || msg.content.includes("<:pwease:750099877899272273>"))
+  {
+    var chance =Math.random()*100;
+    console.log(chance);
+    if(chance<30){
+    const channel = msg.member.voice.channel;
       if (!channel) return console.error("Nisi u voice!");
       channel.join().then(connection => {
         // Yay, it worked!
@@ -140,6 +143,15 @@ client.on('message', msg => {
         // Oh no, it errored! Let's log it to console :)
         console.error(e);
       });
+    }
+  }
+	
+	
+    if(!msg.content.startsWith(prefix) || msg.author.bot) return;
+    const args=msg.content.slice(prefix.length).trim().split(' ');
+    const command=args.shift().toLowerCase();
+	if(command=="test"){
+	msg.channel.send(voice);
 		
 	}
 	    if(command=="day"){
