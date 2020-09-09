@@ -132,7 +132,7 @@ client.on('message', msg => {
       channel.join().then(connection => {
         // Yay, it worked!
         console.log("Successfully connected.");
-        const dispatcher= connection.play('combobreak.mp3');
+        const dispatcher= connection.play('https://raw.githubusercontent.com/igorkandic/nhentai/master/combobreak.mp3');
         dispatcher.on("finish", () => {channel.leave();});
         
         
