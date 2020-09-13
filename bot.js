@@ -146,6 +146,27 @@ client.on('message', msg => {
     }
   }
 	
+	  if(!msg.content.startsWith(prefix) &&(msg.content.includes("seno") || msg.content.includes("se~no") || msg.content.includes("se no") ))
+  {
+    var chance =Math.random()*100;
+    console.log(chance);
+    if(chance<30){
+    const channel = msg.member.voice.channel;
+      if (!channel) return console.error("Nisi u voice!");
+      channel.join().then(connection => {
+        // Yay, it worked!
+        console.log("Successfully connected.");
+        const dispatcher= connection.play('https://raw.githubusercontent.com/igorkandic/nhentai/master/seno.mp3');
+        dispatcher.on("finish", () => {channel.leave();});
+        
+        
+      }).catch(e => {
+        // Oh no, it errored! Let's log it to console :)
+        console.error(e);
+      });
+    }
+  }
+	
 	
     if(!msg.content.startsWith(prefix) || msg.author.bot) return;
     const args=msg.content.slice(prefix.length).trim().split(' ');
@@ -169,6 +190,21 @@ client.on('message', msg => {
         console.error(e);
       });
 	}
+	    if(command=="seno"){
+      const channel = msg.member.voice.channel;
+      if (!channel) return console.error("Nisi u voice!");
+      channel.join().then(connection => {
+        // Yay, it worked!
+        console.log("Successfully connected.");
+        const dispatcher= connection.play('https://raw.githubusercontent.com/igorkandic/nhentai/master/seno.mp3');
+        dispatcher.on("finish", () => {channel.leave();});
+        
+        
+      }).catch(e => {
+        // Oh no, it errored! Let's log it to console :)
+        console.error(e);
+      });
+    }
 	    if(command=="day"){
       if(!args.length){
         var sql = "CALL GetTodayXP(?)";
