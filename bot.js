@@ -135,6 +135,7 @@ client.on('message', msg => {
       channel.join().then(connection => {
         // Yay, it worked!
         console.log("Successfully connected.");
+	       msg.react('754801062409666620');
         const dispatcher= connection.play('https://raw.githubusercontent.com/igorkandic/nhentai/master/combobreak.mp3');
         dispatcher.on("finish", () => {channel.leave();});
         
@@ -156,6 +157,7 @@ client.on('message', msg => {
       channel.join().then(connection => {
         // Yay, it worked!
         console.log("Successfully connected.");
+	      msg.react('754801820181987408');
         const dispatcher= connection.play('https://raw.githubusercontent.com/igorkandic/nhentai/master/seno.mp3');
         dispatcher.on("finish", () => {channel.leave();});
         
