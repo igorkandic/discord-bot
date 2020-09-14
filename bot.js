@@ -194,7 +194,7 @@ client.on('message', msg => {
 	}
 	    if(command=="seno"){
       const channel = msg.member.voice.channel;
-      if (!channel) return console.error("Nisi u voice!");
+      if (!channel) return msg.channel.send("Demo sonnan ja dame Mou sonnan ja hora");
       channel.join().then(connection => {
         // Yay, it worked!
         console.log("Successfully connected.");
