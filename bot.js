@@ -2,6 +2,8 @@ const Discord = require('discord.js');
 const NanaAPI = require("nana-api");
 const nana = new NanaAPI();
 var mysql = require('mysql'); 
+const fetch = require("node-fetch");
+const hypixel=process.env.hypixel;
 var con = mysql.createConnection({
   host: process.env.mysqlhost,
   user: process.env.mysqluser,
@@ -49,6 +51,48 @@ function addXp(id){
 var poruke=["Go to horny jail","bonk","kys","sta to radis krompiru","ono tvoje","<:bonk:741385199685992500>","tuzna si","baka"];
 var bonks=["https://media1.tenor.com/images/c409b7031d3768c24db8bc0cbb1a2cb5/tenor.gif","https://media1.tenor.com/images/347f852d3dfa48502406fa949fcc1449/tenor.gif","https://media1.tenor.com/images/2bee3954016b407ddaa255e2ca6dc529/tenor.gif"];
 var voice=[];
+
+function getId(playername) {
+  
+  return fetch(`https://api.mojang.com/users/profiles/minecraft/${playername}`)
+    .then(data => data.json())
+    .then(player => player.id)
+    .catch(function(){
+      return "069a79f444e94726a5befca90e38aaf5";
+    });
+
+}
+
+async function bwstats(name,channel){
+  const id=await getId(name);
+  const response=await fetch(`https://api.hypixel.net/player?key=${hypixel}&uuid=${id}`)
+  .then(data => data.json());
+  try{
+    const exampleEmbed = new Discord.MessageEmbed()
+    .setColor('#0099ff')
+    .setTitle('Bedwars Stats for '+name)
+    .setURL(`https://plancke.io/hypixel/player/stats/${name}#BedWars`)
+    .setThumbnail(`https://minotar.net/avatar/${name}.png`)
+    .addFields(
+      { name: 'Winstreak', value: response.player.stats.Bedwars.winstreak, inline: true },
+      { name: 'Diamonds Collected', value: response.player.stats.Bedwars.diamond_resources_collected_bedwars, inline: true },
+      { name: 'Emeralds Collected', value: response.player.stats.Bedwars.emerald_resources_collected_bedwars, inline: true },
+      { name: '\u200B', value: '\u200B' },
+      { name: 'Doubles Kills', value: response.player.stats.Bedwars.eight_two_kills_bedwars, inline: true },
+      { name: 'Doubles Deaths', value: response.player.stats.Bedwars.eight_two_deaths_bedwars, inline: true },
+      { name: 'Doubles Wins', value: response.player.stats.Bedwars.eight_two_wins_bedwars, inline: true },
+      { name: '\u200B', value: '\u200B' },
+      { name: 'Overall Kills', value: response.player.stats.Bedwars.kills_bedwars, inline: true },
+      { name: 'Overall Deaths', value: response.player.stats.Bedwars.deaths_bedwars, inline: true },
+      { name: 'Overall Wins', value: response.player.stats.Bedwars.wins_bedwars, inline: true }
+    )
+    .setTimestamp()
+    .setFooter('Vanilla', 'https://cdn.discordapp.com/avatars/746781735643250829/d02b27cf6c394ec5003f673ec346d877.png?size=4096');
+    channel.send(exampleEmbed);
+  }catch(error){
+    channel.send("jeiga");
+  }
+}
 
 function DodajMuGa(){
 
@@ -177,6 +221,71 @@ client.on('message', msg => {
 	msg.channel.send(voice);
 		
 	}
+	//povezi mc sa dc
+    if(command=="mc"){
+      if(args.length==1){
+      var discID=msg.author.id;
+      var mcName=args[0];
+      var sql = "UPDATE users SET minecraft='"+mcName+"' WHERE DiscordID="+discID;
+        con.query(sql, function (err, result) {
+          if (err) throw err;
+         msg.channel.send("Minecraft username set to: "+mcName);
+        });
+      }
+      else{
+        msg.channel.send("ukucaj minecraft ime");
+      }
+
+    }
+    if(command=="bedwars"){
+      //vuce iz baze
+      if(args.length==0)
+      {
+        con.query("SELECT minecraft FROM users WHERE DiscordId= "+mysql.escape(msg.author.id), function (err, result, fields) {
+          if (err) throw err;
+          if(result[0].minecraft==""){
+        msg.channel.send("Povezi mc sa komandom !mc IME");
+          }
+          else{
+            //kod za stats
+          //  msg.channel.send("stats of "+result[0].minecraft);
+          bwstats(result[0].minecraft,msg.channel);
+          }
+        });
+
+      }
+      //proverava za nekoga
+      if(args.length==1)
+      {
+        //moze biti direkt mc ime
+        //moze biti tag
+        var user=args[0];
+        try{
+          user=getUserFromMention(args[0]);
+        }catch(e){
+          console.log(e);
+        }finally{
+        }
+        if(user instanceof Discord.User){
+        var sql = "SELECT minecraft FROM users where DiscordId="+mysql.escape(user.id);
+        con.query(sql, function (err, result,fields) {
+          if (err) throw err;
+          if(result[0].minecraft=="")
+          msg.channel.send(user.username+` nema postavljen mc`);
+          else
+            //kod za stats
+          //  msg.channel.send("stats of "+result[0].minecraft);
+           bwstats(result[0].minecraft,msg.channel);
+        });
+      }else{
+        //kod za stats
+        // msg.channel.send("stats of "+args[0]);
+        bwstats(args[0],msg.channel);
+      }
+
+      }
+
+    }
 	if(command=="baka"){
 	    const channel = msg.member.voice.channel;
       if (!channel) return console.error("Nisi u voice!");
