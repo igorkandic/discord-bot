@@ -330,7 +330,7 @@ client.on('message', msg => {
           url=url.replace("www.",'');
           (async(url) => {
             var buf = await ScrapeMangaGo(url);
-            console.log("HTML: "+buf);
+            console.log("HTML: "+buf.toString('utf-8'));
            $= cheerio.load(buf.toString('utf-8'));
            chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
            name=$('h1').eq(0).text().trim();
