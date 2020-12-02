@@ -97,7 +97,7 @@ async function bwstats(name,channel){
     channel.send("jeiga");
   }
 }
-async function ScrapeMangaGo(url) {
+function ScrapeMangaGo(url) {
   return new Promise((resolve, reject) => {
     const http = require('http'),
       https = require('https');
@@ -113,9 +113,9 @@ async function ScrapeMangaGo(url) {
     const options={
       hostname: loc.hostname,
       path:loc.pathname+loc.search,
-      headers:{
-        agent: 'Mozilla/5.0'
-      }
+       headers: {
+    'User-Agent': 'Request-Promise'
+  }
     }
 
     client.get(options, (resp) => {
@@ -150,10 +150,10 @@ function prodjiJednog(obj,i){
   setTimeout(function(i){
     (async(url) => {
            
-       var buf = await cloudflareScraper.get(url);
+       var buf = await ScrapeMangaGo(url);
 	    
        
-      $= cheerio.load(buf);
+       $= cheerio.load(buf.toString('utf-8'));
       chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
       name=$('h1').eq(0).text().trim();
       latestchap=$("#chapter_table").find("h4").find("a").attr("href");
@@ -343,10 +343,10 @@ client.on('message', msg => {
           url=url.replace("www.",'');
           (async(url) => {
                   
-             var buf = await cloudflareScraper.get(url);
+             var buf =  await ScrapeMangaGo(url);
 
            
-           $= cheerio.load(buf);
+            $= cheerio.load(buf.toString('utf-8'));
            chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
            name=$('h1').eq(0).text().trim();
            latestchap=$("#chapter_table").find("h4").find("a").attr("href");
