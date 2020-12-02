@@ -337,7 +337,7 @@ client.on('message', msg => {
         if(url.includes("mangago.me/read-manga/"))
         {
           
-          url=url.replace("www.",'');
+         // url=url.replace("www.",'');
           (async(url) => {
             var buf = await ScrapeMangaGo(url);
             console.log("HTML: "+buf.toString('utf-8'));
@@ -364,7 +364,8 @@ client.on('message', msg => {
       
       }
       if(args.length==2){
-        var url=args[0].replace("www.",'');
+        var url=args[0];
+	     // url=url.replace("www.",'');
         if(args[1]=="remove"){
           
           var sql="DELETE FROM mangago WHERE manga='"+url+"' AND DiscordId="+mysql.escape(discID);
