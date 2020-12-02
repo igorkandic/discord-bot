@@ -5,6 +5,7 @@ var mysql = require('mysql');
 const fs = require('fs');
 var http = require('http');
 const fetch = require("node-fetch");
+var cheerio = require('cheerio');
 const hypixel=process.env.hypixel;
 var con = mysql.createConnection({
   host: process.env.mysqlhost,
