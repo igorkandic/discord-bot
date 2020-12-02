@@ -6,6 +6,7 @@ const fs = require('fs');
 var http = require('http');
 const fetch = require("node-fetch");
 var cheerio = require('cheerio');
+const Humanoid = require("humanoid-js");
 const hypixel=process.env.hypixel;
 var con = mysql.createConnection({
   host: process.env.mysqlhost,
@@ -148,9 +149,10 @@ setInterval(DodajMuGa,60*1000);
 function prodjiJednog(obj,i){
   setTimeout(function(i){
     (async(url) => {
-       var buf = await ScrapeMangaGo(url);
+            let humanoid = new Humanoid();
+       var buf = await humanoid.sendRequest(url);
        
-      $= cheerio.load(buf.toString('utf-8'));
+      $= cheerio.load(buf.body);
       chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
       name=$('h1').eq(0).text().trim();
       latestchap=$("#chapter_table").find("h4").find("a").attr("href");
@@ -339,9 +341,10 @@ client.on('message', msg => {
           
          // url=url.replace("www.",'');
           (async(url) => {
-            var buf = await ScrapeMangaGo(url);
-            console.log("HTML: "+buf.toString('utf-8'));
-           $= cheerio.load(buf.toString('utf-8'));
+                  let humanoid = new Humanoid();
+       var buf = await humanoid.sendRequest(url);
+            
+           $= cheerio.load(buf.body);
            chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
            name=$('h1').eq(0).text().trim();
            latestchap=$("#chapter_table").find("h4").find("a").attr("href");
