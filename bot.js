@@ -96,7 +96,7 @@ async function bwstats(name,channel){
     channel.send("jeiga");
   }
 }
-function ScrapeMangaGo(url) {
+async function ScrapeMangaGo(url) {
   return new Promise((resolve, reject) => {
     const http = require('http'),
       https = require('https');
