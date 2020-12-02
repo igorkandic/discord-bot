@@ -2,6 +2,8 @@ const Discord = require('discord.js');
 const NanaAPI = require("nana-api");
 const nana = new NanaAPI();
 var mysql = require('mysql'); 
+const fs = require('fs');
+var http = require('http');
 const fetch = require("node-fetch");
 const hypixel=process.env.hypixel;
 var con = mysql.createConnection({
@@ -102,6 +104,71 @@ function DodajMuGa(){
  
 }
 setInterval(DodajMuGa,60*1000);
+function prodjiJednog(obj,i){
+  setTimeout(function(i){
+    (async(url) => {
+       var buf = await ScrapeMangaGo(url);
+       
+      $= cheerio.load(buf.toString('utf-8'));
+      chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
+      name=$('h1').eq(0).text().trim();
+      latestchap=$("#chapter_table").find("h4").find("a").attr("href");
+      if(obj.chapters!=chapters)
+      {
+        console.log("izasao novi chap za: "+obj.name);
+       // console.log(link.DiscordId);
+        const exampleEmbed = new Discord.MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle('Izasao je novi chapter za '+obj.name)
+        .setURL(obj.manga)
+        .addField("Chapter "+chapters,"[link]"+"("+obj.latestchap+")")
+        .setTimestamp()
+        .setFooter('Vanilla', 'https://cdn.discordapp.com/avatars/746781735643250829/d02b27cf6c394ec5003f673ec346d877.png?size=4096');
+        
+        client.users.fetch(obj.DiscordId).then(user => user.send(exampleEmbed)).catch(console.error);
+        console.log("Obavestenje poslato");
+        var sql = "UPDATE mangago SET chapters = '"+chapters+"' WHERE name="+mysql.escape(name)+";";
+        con.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log("chapters updated");
+         // console.log(chapters);
+        });
+
+      }else{
+       // console.log("nema novog chap");
+      }
+     })(obj.manga);
+
+},i*5000);
+  
+}
+function ProdjiSve(result){
+  var i=1;
+  result.forEach(link=> {
+    prodjiJednog(link,i++);
+
+  });
+ 
+  //console.log(i);
+  setTimeout(ponovi,i*5000);
+}
+function ponovi(){
+  console.log("[manga]: ponovi");
+  var sql = "SELECT * FROM mangago";
+  con.query(sql, function (err, result,fields) {
+    if (err) throw err;
+    if(!result[0]){
+    console.log("[manga]: prazno");
+    setTimeout(ponovi,10000);
+    }
+    else{
+      ProdjiSve(result);
+  }
+    
+  });
+
+}
+setTimeout(ponovi,10000);
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -221,6 +288,73 @@ client.on('message', msg => {
 	msg.channel.send(voice);
 		
 	}
+	  if(command=="notify"){
+      const discID=msg.author.id;
+      if(args.length==1){
+        var url=args[0];
+        
+        if(url.includes("mangago.me/read-manga/"))
+        {
+          
+          url=url.replace("www.",'');
+          (async(url) => {
+            var buf = await ScrapeMangaGo(url);
+            
+           $= cheerio.load(buf.toString('utf-8'));
+           chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
+           name=$('h1').eq(0).text().trim();
+           latestchap=$("#chapter_table").find("h4").find("a").attr("href");
+           var sql = "INSERT INTO mangago (DiscordId, manga,chapters,latestchap,name) VALUES ('"+discID+"', '"+url+"','"+chapters+"','"+latestchap+"',"+mysql.escape(name)+")";
+           
+           con.query(sql, function (err, result) {
+            if (err) 
+            {msg.channel.send("Duplikat");
+            console.log(err);
+          }
+            else
+           msg.channel.send("Dodato");
+          });
+          })(url);
+        
+
+      }
+        else
+        msg.channel.send("Link nije dobar");
+      
+      }
+      if(args.length==2){
+        var url=args[0].replace("www.",'');
+        if(args[1]=="remove"){
+          
+          var sql="DELETE FROM mangago WHERE manga='"+url+"' AND discordId="+mysql.escape(discID);
+          con.query(sql, function (err, result) {
+            if (err) throw err;
+            msg.channel.send("Obrisano");
+          });
+        
+        }
+      }
+    }
+    if(command=="list"){
+      var sql = "SELECT * FROM mangago where discordId="+mysql.escape(msg.author.id);
+      con.query(sql, function (err, result,fields) {
+        if (err) throw err;
+        if(!result[0])
+        msg.channel.send("Prazno.");
+        else{
+          var list = new Discord.MessageEmbed()
+          .setColor('#0099ff');
+          
+          
+       
+        result.forEach(link=> {
+          list.addField(link.name," ["+link.name+"]("+link.manga+")");
+        });
+          msg.channel.send(list);
+      }
+        
+      });
+    }
 	//povezi mc sa dc
     if(command=="mc"){
       if(args.length==1){
