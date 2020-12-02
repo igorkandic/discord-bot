@@ -106,8 +106,18 @@ async function ScrapeMangaGo(url) {
     if (url.toString().indexOf("https") === 0) {
       client = https;
     }
+	      var loc=new URL(url);
+    console.log(loc.hostname);
+    console.log(loc.pathname+loc.search);
+    const options={
+      hostname: loc.hostname,
+      path:loc.pathname+loc.search,
+      headers:{
+        agent: 'Mozilla/5.0'
+      }
+    }
 
-    client.get(url, (resp) => {
+    client.get(options, (resp) => {
      console.log('STATUS: ' + resp.statusCode);// nothing here executes
             console.log('HEADERS: ' + JSON.stringify(resp.headers));
       let chunks = [];
