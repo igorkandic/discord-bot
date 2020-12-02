@@ -113,9 +113,7 @@ function ScrapeMangaGo(url) {
     const options={
       hostname: loc.hostname,
       path:loc.pathname+loc.search,
-       headers: {
-    'User-Agent': 'Request-Promise'
-  }
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36' }
     }
 
     client.get(options, (resp) => {
