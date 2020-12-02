@@ -357,7 +357,7 @@ client.on('message', msg => {
         var url=args[0].replace("www.",'');
         if(args[1]=="remove"){
           
-          var sql="DELETE FROM mangago WHERE manga='"+url+"' AND discordId="+mysql.escape(discID);
+          var sql="DELETE FROM mangago WHERE manga='"+url+"' AND DiscordId="+mysql.escape(discID);
           con.query(sql, function (err, result) {
             if (err) throw err;
             msg.channel.send("Obrisano");
@@ -367,7 +367,7 @@ client.on('message', msg => {
       }
     }
     if(command=="list"){
-      var sql = "SELECT * FROM mangago where discordId="+mysql.escape(msg.author.id);
+      var sql = "SELECT * FROM mangago where DiscordId="+mysql.escape(msg.author.id);
       con.query(sql, function (err, result,fields) {
         if (err) throw err;
         if(!result[0])
