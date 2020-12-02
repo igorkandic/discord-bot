@@ -108,8 +108,8 @@ async function ScrapeMangaGo(url) {
     }
 
     client.get(url, (resp) => {
-    // console.log('STATUS: ' + resp.statusCode);// nothing here executes
-        //    console.log('HEADERS: ' + JSON.stringify(resp.headers));
+     console.log('STATUS: ' + resp.statusCode);// nothing here executes
+            console.log('HEADERS: ' + JSON.stringify(resp.headers));
       let chunks = [];
 
       // A chunk of data has been recieved.
