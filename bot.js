@@ -151,6 +151,7 @@ function prodjiJednog(obj,i){
     (async(url) => {
             let humanoid = new Humanoid();
        var buf = await humanoid.sendRequest(url);
+	    console.log(buf.statusCode);
        
       $= cheerio.load(buf.body);
       chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
@@ -343,7 +344,7 @@ client.on('message', msg => {
           (async(url) => {
                   let humanoid = new Humanoid();
        var buf = await humanoid.sendRequest(url);
-            
+            console.log(buf.statusCode);
            $= cheerio.load(buf.body);
            chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
            name=$('h1').eq(0).text().trim();
