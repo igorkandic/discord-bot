@@ -4,14 +4,14 @@
   "description": "",
   "main": "bot.js",
   "dependencies": {
+    "request": "^2.88.2",
     "cheerio": "^1.0.0-rc.3",
     "discord.js": "^12.3.1",
     "cloudscraper": "^4.6.0",
     "mysql": "^2.18.1",
     "nana-api": "^1.1.2",
     "node-fetch": "^2.6.1",
-    "opusscript": "0.0.7",
-    "request": "^2.88.2"
+    "opusscript": "0.0.7"
   },
   "devDependencies": {},
   "scripts": {
