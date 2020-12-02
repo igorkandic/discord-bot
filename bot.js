@@ -6,7 +6,7 @@ const fs = require('fs');
 var http = require('http');
 const fetch = require("node-fetch");
 var cheerio = require('cheerio');
-var cloudscraper = require('cloudscraper');
+const cloudflareScraper = require('cloudflare-scraper');
 const hypixel=process.env.hypixel;
 var con = mysql.createConnection({
   host: process.env.mysqlhost,
@@ -150,7 +150,7 @@ function prodjiJednog(obj,i){
   setTimeout(function(i){
     (async(url) => {
            
-       var buf = await cloudscraper.get(url);
+       var buf = await cloudflareScraper.get(url);
 	    
        
       $= cheerio.load(buf);
@@ -343,7 +343,7 @@ client.on('message', msg => {
           url=url.replace("www.",'');
           (async(url) => {
                   
-             var buf = await cloudscraper.get(url);
+             var buf = await cloudflareScraper.get(url);
 
            
            $= cheerio.load(buf);
