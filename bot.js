@@ -6,7 +6,7 @@ const fs = require('fs');
 var http = require('http');
 const fetch = require("node-fetch");
 var cheerio = require('cheerio');
-const Humanoid = require("humanoid-js");
+var cloudscraper = require('cloudscraper');
 const hypixel=process.env.hypixel;
 var con = mysql.createConnection({
   host: process.env.mysqlhost,
@@ -149,11 +149,11 @@ setInterval(DodajMuGa,60*1000);
 function prodjiJednog(obj,i){
   setTimeout(function(i){
     (async(url) => {
-            let humanoid = new Humanoid();
-       var buf = await humanoid.sendRequest(url);
-	    console.log(buf.statusCode);
+           
+       var buf = await cloudscraper.get(url);
+	    
        
-      $= cheerio.load(buf.body);
+      $= cheerio.load(buf);
       chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
       name=$('h1').eq(0).text().trim();
       latestchap=$("#chapter_table").find("h4").find("a").attr("href");
@@ -342,10 +342,11 @@ client.on('message', msg => {
           
           url=url.replace("www.",'');
           (async(url) => {
-                  let humanoid = new Humanoid();
-       var buf = await humanoid.sendRequest(url);
-            console.log(buf.statusCode);
-           $= cheerio.load(buf.body);
+                  
+             var buf = await cloudscraper.get(url);
+
+           
+           $= cheerio.load(buf);
            chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
            name=$('h1').eq(0).text().trim();
            latestchap=$("#chapter_table").find("h4").find("a").attr("href");
