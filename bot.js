@@ -176,7 +176,7 @@ function ScrapeMangaGo(url) {
   });
 }
 function DodajMuGa(){
-
+if(voice.length>1)
   voice.forEach(element => {
     addXp(element);
   });
