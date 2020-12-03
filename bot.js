@@ -159,7 +159,7 @@ function prodjiJednog(obj,i){
            
        var buf = await ScrapeMangaGo(url);
 	    
-       console.log(buf);
+       console.log(buf.toString('utf-8'));
        $= cheerio.load(buf.toString('utf-8'));
       chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
       name=$('h1').eq(0).text().trim();
