@@ -249,7 +249,7 @@ function ponovi(){
   });
 
 }
-setTimeout(ponovi,10000);
+//setTimeout(ponovi,10000);
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -374,7 +374,7 @@ client.on('message', msg => {
       console.log("lol "+ScrapeMangaGoPuppeteer(args[0]));
       
     }
-	  if(command=="notify"){
+	  if(command=="notify" && false){
       const discID=msg.author.id;
       if(args.length==1){
         var url=args[0];
@@ -424,7 +424,7 @@ client.on('message', msg => {
         }
       }
     }
-    if(command=="list"){
+    if(command=="list"  && false){
       var sql = "SELECT * FROM mangago where DiscordId="+mysql.escape(msg.author.id);
       con.query(sql, function (err, result,fields) {
         if (err) throw err;
