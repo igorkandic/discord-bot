@@ -6,6 +6,7 @@ const fs = require('fs');
 var http = require('http');
 const fetch = require("node-fetch");
 var cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
 const cloudflareScraper = require('cloudflare-scraper');
 const hypixel=process.env.hypixel;
 var con = mysql.createConnection({
@@ -96,6 +97,35 @@ async function bwstats(name,channel){
   }catch(error){
     channel.send("jeiga");
   }
+}
+function ScrapeMangaGoPuppeteer(url){
+  
+  (async event => {
+    const link = url;
+    var html;
+    const browser = await puppeteer.launch({ headless: true, slowMo: 100, devtools: true });
+  
+    try {
+      const page = await browser.newPage();
+  
+      await page.setViewport({ width: 1199, height: 900 });
+  
+      await page.goto(link, { waitUntil: 'networkidle0' });
+  
+      html=await page.content();
+      
+      await page.close();
+      await browser.close();
+      
+    } catch (error) {
+      console.log(error);
+      await browser.close();
+    }
+   console.log("PROSAO");
+   console.log(html);
+    return html;
+  })();
+  
 }
 function ScrapeMangaGo(url) {
   return new Promise((resolve, reject) => {
@@ -339,6 +369,10 @@ client.on('message', msg => {
 	msg.channel.send(voice);
 		
 	}
+	    if(command=="test"){
+      console.log(ScrapeMangaGoPuppeteer("http://mangago.me/read-manga/tales_of_a_traveler_s_journey/"));
+      
+    }
 	  if(command=="notify"){
       const discID=msg.author.id;
       if(args.length==1){
