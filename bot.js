@@ -123,7 +123,7 @@ function ScrapeMangaGo(url) {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
         'upgrade-insecure-requests': 1,
-      }
+      }}
 
     client.get(options, (resp) => {
      console.log('STATUS: ' + resp.statusCode);// nothing here executes
