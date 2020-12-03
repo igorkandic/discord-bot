@@ -371,7 +371,7 @@ client.on('message', msg => {
 	}
 	    if(command=="test"){
 		    if(args.length==1)
-      console.log(ScrapeMangaGoPuppeteer("lol "+args[0]));
+      console.log("lol "+ScrapeMangaGoPuppeteer(args[0]));
       
     }
 	  if(command=="notify"){
