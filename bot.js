@@ -113,8 +113,17 @@ function ScrapeMangaGo(url) {
     const options={
       hostname: loc.hostname,
       path:loc.pathname+loc.search,
-        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36' }
-    }
+      headers: {
+        accept: 'application/json,text/javascript,text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'accept-language': 'en-US;q=0.8,en;q=0.7',
+        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36',
+        pragma: 'no-cache',
+        'cache-control': 'no-cache',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        'upgrade-insecure-requests': 1,
+      }
 
     client.get(options, (resp) => {
      console.log('STATUS: ' + resp.statusCode);// nothing here executes
@@ -148,7 +157,7 @@ function prodjiJednog(obj,i){
   setTimeout(function(i){
     (async(url) => {
            
-       var buf = await cloudflareScraper.get(url);
+       var buf = await ScrapeMangaGo(url);
 	    
        console.log(buf);
        $= cheerio.load(buf.toString('utf-8'));
