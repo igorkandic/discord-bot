@@ -103,7 +103,7 @@ function ScrapeMangaGoPuppeteer(url){
   (async event => {
     const link = url;
     var html;
-    const browser = await puppeteer.launch({ headless: true, slowMo: 100, devtools: true });
+    const browser = await puppeteer.launch({ headless: true, slowMo: 100, devtools: true ,args: ['--no-sandbox']});
   
     try {
       const page = await browser.newPage();
