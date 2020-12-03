@@ -370,7 +370,7 @@ client.on('message', msg => {
 		
 	}
 	    if(command=="test"){
-      console.log(ScrapeMangaGoPuppeteer("http://mangago.me/read-manga/tales_of_a_traveler_s_journey/"));
+      console.log(ScrapeMangaGoPuppeteer("lol "+arg[0]);
       
     }
 	  if(command=="notify"){
