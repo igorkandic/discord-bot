@@ -148,9 +148,9 @@ function prodjiJednog(obj,i){
   setTimeout(function(i){
     (async(url) => {
            
-       var buf = await ScrapeMangaGo(url);
+       var buf = await cloudflareScraper.get(url);
 	    
-       
+       console.log(buf);
        $= cheerio.load(buf.toString('utf-8'));
       chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
       name=$('h1').eq(0).text().trim();
