@@ -372,9 +372,7 @@ client.on('message', msg => {
 	    if(command=="test"){
 		    if(args.length==1)
 		    {
-			   const response = await cloudflareScraper.get(args[0]);
-      
-			  console.log(response);  
+			    cloudflareScraper.get(args[0]).then(response=>console.log(response));
 		    }
       
     }
