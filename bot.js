@@ -371,7 +371,11 @@ client.on('message', msg => {
 	}
 	    if(command=="test"){
 		    if(args.length==1)
-      console.log("lol "+ScrapeMangaGoPuppeteer(args[0]));
+		    {
+			   const response = await cloudflareScraper.get(args[0]);
+      
+			  console.log(response);  
+		    }
       
     }
 	  if(command=="notify" && false){
