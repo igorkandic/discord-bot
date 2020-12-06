@@ -7,7 +7,7 @@ var http = require('http');
 const fetch = require("node-fetch");
 var cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
-const cloudflareScraper = require('cloudflare-scraper');
+const useProxy = require('puppeteer-page-proxy');
 const hypixel=process.env.hypixel;
 var con = mysql.createConnection({
   host: process.env.mysqlhost,
@@ -98,21 +98,17 @@ async function bwstats(name,channel){
     channel.send("jeiga");
   }
 }
-function ScrapeMangaGoPuppeteer(url){
-  
-  (async event => {
-    const link = url;
-    var html;
-    const browser = await puppeteer.launch({ headless: true, slowMo: 100, devtools: true ,args: ['--no-sandbox']});
-  
+async function ScrapeMangaGoPuppeteer(url){
+  var html;
+  const link = url;
+  await puppeteer.launch({ headless: true,args: ['--no-sandbox'],executablePath: '/usr/bin/chromium-browser'}).then(async browser =>{
     try {
       const page = await browser.newPage();
-  
-      await page.setViewport({ width: 1199, height: 900 });
-  
+      await useProxy(page, 'socks5://'+process.env.nordusr+':'+process.env.nordpw+'@socks-se5.nordvpn.com:1080');
       await page.goto(link, { waitUntil: 'networkidle0' });
   
       html=await page.content();
+     // await page.screenshot({path: 'slika.png'});
       
       await page.close();
       await browser.close();
@@ -121,11 +117,16 @@ function ScrapeMangaGoPuppeteer(url){
       console.log(error);
       await browser.close();
     }
-   console.log("PROSAO");
-   console.log(html);
-    return html;
-  })();
+
+  });
   
+  
+
+   console.log("PROSAO");
+  // console.log(html);
+    
+  
+  return html;
 }
 function ScrapeMangaGo(url) {
   return new Promise((resolve, reject) => {
@@ -186,29 +187,35 @@ setInterval(DodajMuGa,60*1000);
 function prodjiJednog(obj,i){
   setTimeout(function(i){
     (async(url) => {
-           
-       var buf = await ScrapeMangaGo(url);
-	    
-       console.log(buf.toString('utf-8'));
-       $= cheerio.load(buf.toString('utf-8'));
+       var buf = await ScrapeMangaGoPuppeteer(url);
+      // console.log(buf.toString('utf-8'));
+      $= cheerio.load(buf.toString('utf-8'));
       chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
       name=$('h1').eq(0).text().trim();
       latestchap=$("#chapter_table").find("h4").find("a").attr("href");
-      if(obj.chapters!=chapters)
+      if(obj.chapters==-1)
       {
-        console.log("izasao novi chap za: "+obj.name);
+        var sql = "UPDATE mangago SET chapters = '"+chapters+"',latestchap="+mysql.escape(latestchap)+",name="+mysql.escape(name)+" WHERE manga="+mysql.escape(url)+"AND DiscordId="+mysql.escape(obj.DiscordId)+";";
+        con.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log("first time added");
+         // console.log(chapters);
+        });
+      }else if(obj.chapters!=chapters)
+      {
+        console.log("izasao novi chap za: "+name);
        // console.log(link.DiscordId);
         const exampleEmbed = new Discord.MessageEmbed()
         .setColor('#0099ff')
-        .setTitle('Izasao je novi chapter za '+obj.name)
+        .setTitle('Izasao je novi chapter za '+name)
         .setURL(obj.manga)
-        .addField("Chapter "+chapters,"[link]"+"("+obj.latestchap+")")
+        .addField("Chapter "+chapters,"[link]"+"("+latestchap+")")
         .setTimestamp()
         .setFooter('Vanilla', 'https://cdn.discordapp.com/avatars/746781735643250829/d02b27cf6c394ec5003f673ec346d877.png?size=4096');
         
         client.users.fetch(obj.DiscordId).then(user => user.send(exampleEmbed)).catch(console.error);
         console.log("Obavestenje poslato");
-        var sql = "UPDATE mangago SET chapters = '"+chapters+"' WHERE name="+mysql.escape(name)+";";
+        var sql = "UPDATE mangago SET chapters = '"+chapters+"' WHERE name="+mysql.escape(name)+" AND DiscordId="+mysql.escape(obj.DiscordId)+";";
         con.query(sql, function (err, result) {
           if (err) throw err;
           console.log("chapters updated");
@@ -216,11 +223,11 @@ function prodjiJednog(obj,i){
         });
 
       }else{
-       // console.log("nema novog chap");
+        console.log("nema novog chap");
       }
      })(obj.manga);
 
-},i*5000);
+},i*15000);
   
 }
 function ProdjiSve(result){
@@ -231,7 +238,7 @@ function ProdjiSve(result){
   });
  
   //console.log(i);
-  setTimeout(ponovi,i*5000);
+  setTimeout(ponovi,i*15000);
 }
 function ponovi(){
   console.log("[manga]: ponovi");
@@ -370,13 +377,9 @@ client.on('message', msg => {
 		
 	}
 	    if(command=="test"){
-		    if(args.length==1)
-		    {
-			   ScrapeMangaGoPuppeteer(args[0]);
-		    }
-      
+	       console.log("test");
     }
-	  if(command=="notify" && false){
+	  if(command=="notify"){
       const discID=msg.author.id;
       if(args.length==1){
         var url=args[0];
@@ -385,16 +388,9 @@ client.on('message', msg => {
         {
           
           url=url.replace("www.",'');
-          (async(url) => {
-                  
-             var buf =  await ScrapeMangaGo(url);
-
+        
            
-            $= cheerio.load(buf.toString('utf-8'));
-           chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
-           name=$('h1').eq(0).text().trim();
-           latestchap=$("#chapter_table").find("h4").find("a").attr("href");
-           var sql = "INSERT INTO mangago (DiscordId, manga,chapters,latestchap,name) VALUES ('"+discID+"', '"+url+"','"+chapters+"','"+latestchap+"',"+mysql.escape(name)+")";
+           var sql = "INSERT INTO mangago (DiscordId, manga,chapters,latestchap,name) VALUES ("+mysql.escape(discID)+", "+mysql.escape(url)+",'-1',"+mysql.escape(url)+","+mysql.escape(url)+")";
            
            con.query(sql, function (err, result) {
             if (err) 
@@ -404,7 +400,7 @@ client.on('message', msg => {
             else
            msg.channel.send("Dodato");
           });
-          })(url);
+         
         
 
       }
@@ -413,8 +409,7 @@ client.on('message', msg => {
       
       }
       if(args.length==2){
-        var url=args[0];
-	      url=url.replace("www.",'');
+        var url=args[0].replace("www.",'');
         if(args[1]=="remove"){
           
           var sql="DELETE FROM mangago WHERE manga='"+url+"' AND DiscordId="+mysql.escape(discID);
@@ -426,9 +421,9 @@ client.on('message', msg => {
         }
       }
     }
-    if(command=="list"  && false){
+    if(command=="list"){
       var sql = "SELECT * FROM mangago where DiscordId="+mysql.escape(msg.author.id);
-      con.query(sql, function (err, result,fields) {
+      con.query(sql, function (err, result) {
         if (err) throw err;
         if(!result[0])
         msg.channel.send("Prazno.");
