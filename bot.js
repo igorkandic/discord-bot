@@ -101,7 +101,7 @@ async function bwstats(name,channel){
 async function ScrapeMangaGoPuppeteer(url){
   var html;
   const link = url;
-  await puppeteer.launch({ headless: true,args: ['--no-sandbox'],executablePath: '/usr/bin/chromium-browser'}).then(async browser =>{
+  await puppeteer.launch({ headless: true,args: ['--no-sandbox']}).then(async browser =>{
     try {
       const page = await browser.newPage();
       await useProxy(page, 'socks5://'+process.env.nordusr+':'+process.env.nordpw+'@socks-se5.nordvpn.com:1080');
