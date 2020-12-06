@@ -227,7 +227,7 @@ function prodjiJednog(obj,i){
       }
      })(obj.manga);
 
-},i*15000);
+},i*30000);
   
 }
 function ProdjiSve(result){
@@ -238,7 +238,7 @@ function ProdjiSve(result){
   });
  
   //console.log(i);
-  setTimeout(ponovi,i*15000);
+  setTimeout(ponovi,i*30000);
 }
 function ponovi(){
   console.log("[manga]: ponovi");
