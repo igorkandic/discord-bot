@@ -256,7 +256,7 @@ function ponovi(){
   });
 
 }
-//setTimeout(ponovi,10000);
+setTimeout(ponovi,10000);
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
