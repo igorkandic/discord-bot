@@ -193,7 +193,7 @@ function prodjiJednog(obj,i){
       chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
       name=$('h1').eq(0).text().trim();
       latestchap=$("#chapter_table").find("h4").find("a").attr("href");
-	chap=$("#chapter_table").find("h4").find("b").text();
+	chap=$("#chapter_table").find("h4").find("b").eq(0).text();
       if(obj.chapters==-1)
       {
         var sql = "UPDATE mangago SET chapters = '"+chapters+"',latestchap="+mysql.escape(latestchap)+",name="+mysql.escape(name)+" WHERE manga="+mysql.escape(url)+"AND DiscordId="+mysql.escape(obj.DiscordId)+";";
