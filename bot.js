@@ -193,6 +193,7 @@ function prodjiJednog(obj,i){
       chapters=$('#chapter_tab').eq(0).text().trim().replace("Chapters(",'').replace(")",'');
       name=$('h1').eq(0).text().trim();
       latestchap=$("#chapter_table").find("h4").find("a").attr("href");
+	chap=$("#chapter_table").find("h4").find("b").text();
       if(obj.chapters==-1)
       {
         var sql = "UPDATE mangago SET chapters = '"+chapters+"',latestchap="+mysql.escape(latestchap)+",name="+mysql.escape(name)+" WHERE manga="+mysql.escape(url)+"AND DiscordId="+mysql.escape(obj.DiscordId)+";";
@@ -209,7 +210,7 @@ function prodjiJednog(obj,i){
         .setColor('#0099ff')
         .setTitle('Izasao je novi chapter za '+name)
         .setURL(obj.manga)
-        .addField("Chapter "+chapters,"[link]"+"("+latestchap+")")
+        .addField("Chapter "+chap,"[link]"+"("+latestchap+")")
         .setTimestamp()
         .setFooter('Vanilla', 'https://cdn.discordapp.com/avatars/746781735643250829/d02b27cf6c394ec5003f673ec346d877.png?size=4096');
         
