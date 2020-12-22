@@ -545,7 +545,7 @@ client.on('message', msg => {
           if(!result[0][0])
           msg.channel.send(`${msg.author.username} danas nisi bila u voice`);
           else
-          msg.channel.send(`${msg.author.username} danas `+result[0][0].vreme+` XP`);
+          msg.channel.send(`${msg.author.username} danas `+result[0][0].vreme+` XP`+` (`+result[0][0].vreme/60+` sati)`);
           
         });
 
@@ -566,7 +566,7 @@ client.on('message', msg => {
           if(!result[0][0])
           msg.channel.send(`${user.username} danas nije bio u voice`);
           else
-            msg.channel.send(`${user.username} danas `+result[0][0].vreme+` XP`);
+            msg.channel.send(`${user.username} danas `+result[0][0].vreme+` XP`+` (`+result[0][0].vreme/60+` sati)`);
         });
       }else{
         msg.channel.send("Pogresno ime");
