@@ -261,6 +261,7 @@ setTimeout(ponovi,10000);
 function cb(){
  let text="Mi-chan, o-tanjoubi omedetou <:pwease:791620441718521870>";
  client.users.fetch("335350766170669056").then(user => user.send(text)).catch(console.error);
+client.users.fetch("208854064069345282").then(user => user.send("Done")).catch(console.error);
 }
 function surprise(cb) {
   (function loop() {
