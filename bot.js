@@ -258,7 +258,22 @@ function ponovi(){
 
 }
 setTimeout(ponovi,10000);
-
+function cb(){
+ let text="Mi-chan, o-tanjoubi omedetou <:pwease:791620441718521870>";
+ client.users.fetch("335350766170669056").then(user => user.send(text)).catch(console.error);
+}
+function surprise(cb) {
+  (function loop() {
+      var now = new Date();
+      if (now.getUTCDate() === 27 && now.getUTCHours() === 23 && now.getMinutes() === 00) {
+          cb();
+      }
+      now = new Date();                  // allow for time passing
+      var delay = 60000 - (now % 60000); // exact ms to next minute interval
+      setTimeout(loop, delay);
+  })();
+}
+surprise(cb);
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
     client.user.setActivity(`nhentai.net`,{type: "WATCHING"});
